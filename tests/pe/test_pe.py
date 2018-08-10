@@ -84,16 +84,12 @@ class TestPe(TestCase):
 
         if sys.platform.startswith("win"):
             subprocess_flags = 0x8000000 # win32con.CREATE_NO_WINDOW?
-            p = Popen(["START", output], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=subprocess_flags)
-            q = Popen(["taskkill", "/im", "section_removed.exe"], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            p = Popen([output], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=subprocess_flags)
 
             stdout, _ = p.communicate()
             self.logger.debug(stdout.decode("utf8"))
+            self.assertIn("Hello World", stdout)
 
-            stdout, _ = q.communicate()
-            self.logger.debug(stdout.decode("utf8"))
-
-            self.assertEqual(q.returncode, 0)
 
     def tearDown(self):
         # Delete it
